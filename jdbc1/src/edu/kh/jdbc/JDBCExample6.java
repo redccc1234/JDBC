@@ -23,7 +23,7 @@ public class JDBCExample6 {
 		
 		try {
 			
-
+			
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			
 			String url = "jdbc:oracle:thin:@localhost:1521:XE"; 
