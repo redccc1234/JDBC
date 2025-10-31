@@ -117,7 +117,7 @@ public class JDBCTemplate {
     		if(conn != null && !conn.isClosed()) conn.close();
     		
 		} catch (Exception e) {
-			System.out.println("커넥션 close() 중 예외 발생");
+			System.out.println("Connection close() 중 예외 발생");
 			e.printStackTrace();
 		}	
     }
@@ -151,7 +151,7 @@ public class JDBCTemplate {
     		if(rs != null && rs.isClosed()) rs.close();
     		
 		} catch (Exception e) {
-			System.out.println("Statement close() 중 예외발생");
+			System.out.println("ResultSe close() 중 예외발생");
 			e.printStackTrace();
 		}
 
