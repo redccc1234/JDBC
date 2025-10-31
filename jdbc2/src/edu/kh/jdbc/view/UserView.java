@@ -72,62 +72,158 @@ public class UserView {
 		
 	}
 
-	private void multiInsertUser() {
-		// TODO Auto-generated method stub
+	/** 8. 여러 User 등록하기
+	 * 
+	 */
+	private void multiInsertUser() throws Exception{
+		
+		System.out.println("\n=====8. 여러 User 등록하기=====\n");
+		
+		System.out.print("등록할 User 의 수 입력 : ");
+		int input = sc.nextInt();
+		sc.nextLine(); // 버퍼 개행 문자 제거
+		
+		// 입력 받을 회원 정보를 저장할 List 객체 생성
+		List<User> userList = new ArrayList<User>();
+		
+		for(int i = 0; i < input ; i++) {
+			
+			String id = null; // 입력된 아이디를 저장할 변수
+			
+			while(true){
+				
+				System.out.print((i+1) + " 번째 ID : ");
+				id = sc.next();
+				
+				// 입력받은 id가 중복인지 검사하는 서비스(SELECT) 호출 후 결과 반환(int) 받기
+				// 중복이 있을 땐 1 , 사용 가능 할 땐 0
+				int count = service.idCheck(id);
+				
+				if(count ==  0) { // 중복이 아닌 경우
+					System.out.println("사용 가능한 아이디 입니다");
+					break;
+				}
+				System.out.println("이미 사용 중인 아이디 입니다. 다시 입력하세요.");
+
+			}
+			
+			// pw,name 입력받기
+			System.out.print((i+1)+ " 번째 PW : ");
+			String pw = sc.next();
+			
+			System.out.print((i+1)+ " 번째 NAME : ");
+			String name = sc.next();
+			
+			// 입력받은 값 3개를 한 번에 묶어서 전달할 수 있도록
+			// User DTO 객체를 생성한 후 필드에 값 세팅
+			User user = new User();
+			
+			user.setUserId(id);
+			user.setUserPw(pw);
+			user.setUserName(name);
+			
+			// userList 에 방금 만든 User 추가
+			userList.add(user);
+			
+		}// for문 종료 지점
+		
+		// 입력받은 모든 User을 INSERT하는 서비스 호출
+		// -> 결과로 삽입된 행의 갯수 반환
+		int result = service.multInsertUser(userList);
+		
+		if (result == userList.size()) {
+			System.out.println("전체 삽입 성공!!!");
+		}else {
+			System.out.println("삽입 실패");
+		}
 		
 	}
 
+	/** 7. User 등록(아이디 중복 검사)
+	 * @throws Exception
+	 */
 	private void insertUser2() throws Exception{
 		
 		System.out.println("\n=====7. User 등록(아이디 중복 검사)=====\n");
 		
-		System.out.print("ID 입력 : ");
-		String id = sc.next();
+		String id = null; // 입력된 아이디를 저장할 변수
 		
+		while(true){
+			
+			System.out.print("ID 입력 : ");
+			id = sc.next();
+			
+			// 입력받은 id가 중복인지 검사하는 서비스(SELECT) 호출 후 결과 반환(int) 받기
+			// 중복이 있을 땐 1 , 사용 가능 할 땐 0
+			int count = service.idCheck(id);
+			
+			if(count ==  0) { // 중복이 아닌 경우
+				System.out.println("사용 가능한 아이디 입니다");
+				break;
+			}
+			System.out.println("이미 사용 중인 아이디 입니다. 다시 입력하세요.");
+		}
+		
+		// pw,name 입력 받기
 		System.out.print("PW 입력 : ");
 		String pw = sc.next();
 		
-		System.out.print("이름 입력 : ");
+		System.out.print("NAME 입력 : ");
 		String name = sc.next();
 		
+		// 입력받은 값 3개를 한 번에 묶어서 전달할 수 있도록
+		// User DTO 객체를 생성한 후 필드에 값 세팅
 		User user = new User();
 		
 		user.setUserId(id);
 		user.setUserPw(pw);
 		user.setUserName(name);
 		
-		int result = service.insertUser2(user);
-		
-		
-		
-	}
-
-	private void updateName() throws Exception{
-		
-		System.out.println("\n=====6. ID, PW가 일치하는 회원이 있을 경우 이름 수정=====\n");
-		
-		System.out.print("ID 입력 : ");
-		String id = sc.next();
-		
-		System.out.print("PW 입력 : ");
-		String pw = sc.next();
-		
-		System.out.print("이름 입력 : ");
-		String name = sc.next();
-		
-		User user = new User();
-		
-		user.setUserId(id);
-		user.setUserPw(pw);
-		user.setUserName(name);
-		
-		int result = service.updateUser(user);
+		// service 호출 후 결과 값 반환
+		int result = service.insertUser(user);
 		
 		if(result > 0) {
-			System.out.println("\n***수정 성공***\n");
+			System.out.println("\n" + id + "사용자가 등록되었습니다.\n");
 		}else {
-			System.out.println("\n***수정 실패***\n");
+			System.out.println("\n***등록 실패***\n");
 		}
+		
+	}
+		
+	/** 6. ID,PW가 일치하는 회원이 있을 경우 이름 수정
+	 *  -> ID,PW가 일치하는 회원 (조회 SELECT)
+	 *  -> 있을 경우 이름 수정 (수정 UPDATE)
+	 */
+	private void updateName() throws Exception{
+		
+		System.out.println("\n=====6. ID, PW가 일치하는 회원의 이름 수정=====\n");
+		
+		System.out.print("ID 입력 : ");
+		String id = sc.next();
+		
+		System.out.print("PW 입력 : ");
+		String pw = sc.next();
+		
+		// 입력받은 ID,PW 가 일치하는 회원이 존재하는지 조회 (SELECT)
+		// -> 수정할 때 필요한 데이터 USER_NO 조회해오기.
+		int userNo = service.selectUserNo(id,pw);
+		
+		// 조회결과가 없을 때
+		if(userNo == 0) {
+			System.out.println("아이디, 비밀번호가 일치하는 사용자가 없음");
+			return;
+		}
+		
+		// 조회결과가 있을 때
+		System.out.print("수정할 이름 입력 :");
+		String name = sc.next();
+		
+		// 위에서 조회된 회원(userNo)의 이름을 수정
+		// 서비스 호출(UPDATE) 후 결과 반환(int)
+		int result = service.updateName(name,userNo);
+		
+		if(result > 0) System.out.println("수정 성공");
+		else           System.out.println("수정 실패");
 		
 		
 	}
@@ -143,16 +239,14 @@ public class UserView {
 
 		System.out.println("\n=====5. USER_NO를 입력 받아 일치하는 User 삭제=====\n");
 		
-		System.out.print("USER_NO 입력 : ");
+		System.out.print("삭제할 사용자 번호 입력 : ");
 		int input = sc.nextInt();
 		
+		// DML -> 행의 갯수로 넘어옴 (int형)
 		int result = service.deleteUser(input);
 		
-		if(result > 0) {
-			System.out.println("\n***삭제 성공***\n");
-		}else {
-			System.out.println("\n***삭제 실패***\n");
-		}
+		if(result > 0) System.out.println("\n***삭제 성공***\n");
+		else           System.out.println("\n***사용자 번호가 일치하는 User가 존재하지 않음***\n");
 		
 		
 	}
@@ -168,16 +262,21 @@ public class UserView {
 		
 		System.out.println("\n=====4.USER_NO를 입력 받아 일치하는 User 조회=====\n");
 		
-		System.out.print("USER_NO을 입력 : ");
+		System.out.print("사용자 번호 입력 : ");
 		int input = sc.nextInt();
 		
+		// service 호출 후 결과 반환 받기
+		// USER_NO (PK) == 중복 값이 없다.
+		// == 일치하는 사용자가 있다면 반드시 딱 1행만 조회
+		// -> 1행의 조회 결과를 담기 위해서 User DTO 객체 1개 사용
 		User user = service.selectUser(input);
+		// 최종적으로 user에 값이 담겨 있다. (view <- service <- dao)
 		
-		if(user != null) {
-			System.out.println(user);
-		}else {
-			System.out.println("찾지 못하였습니다.");
+		if(user == null) {
+			System.out.println("USER_NO와 일치하는 회원을 찾지 못하였습니다.");
+			return;
 		}
+		System.out.println(user);
 	}
 
 	/** 3. User 중 이름에 검색어가 포함된 회원 조회

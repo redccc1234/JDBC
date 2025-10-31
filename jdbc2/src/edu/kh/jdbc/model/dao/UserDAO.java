@@ -177,27 +177,35 @@ public class UserDAO {
 	}
 
 
+	/** 4. USER_NO를 입력받아 일치하는 USER 조회 DAO
+	 * @param conn
+	 * @param input
+	 * @return 조회결과가 있다면 user, 조회결과가 없다면 null로 반환
+	 * @throws Exception
+	 */
 	public User selectUser(Connection conn, int input) throws Exception{
 		
-		User user = new User();
-		
+		// 결과 반환용 
+		User user = null;
+	
 		try {
 			
+			// SQL 작성
 			String sql = """
 					SELECT USER_NO, USER_ID, USER_PW, USER_NAME, 
                     TO_CHAR(ENROLL_DATE, 'YYYY"년" MM"월" DD"일"') ENROLL_DATE
 					FROM TB_USER
 					WHERE USER_NO = ?
-					ORDER BY USER_NO
 					""";
-
+			
+			// pstmt는 service를 통해 만들어짐
 			pstmt = conn.prepareStatement(sql);
 			
 			pstmt.setInt(1,input);
 			
 			rs = pstmt.executeQuery();
 			
-			while(rs.next()) {
+			if(rs.next()) { // 1행 또는 0행만 나오기 때문에 if 사용
 				
 				 int userNo = rs.getInt("USER_NO");
 				 String userId = rs.getString("USER_ID");
@@ -205,7 +213,7 @@ public class UserDAO {
 				 String userName = rs.getString("USER_NAME");
 				 String enrollDate = rs.getString("ENROLL_DATE");
 				 
-				user = new User(userNo,userId,userPw,userName,enrollDate);
+				 user = new User(userNo,userId,userPw,userName,enrollDate);
 	
 			}
 			
@@ -218,8 +226,15 @@ public class UserDAO {
 	}
 
 
+	/** 5. USER_NO를 입력받아 일치하는 User 삭제 DAO
+	 * @param conn
+	 * @param input
+	 * @return result
+	 * @throws Exception
+	 */
 	public int deleteUser(Connection conn, int input) throws Exception{
 		
+		// 결과 저장용 
 		int result = 0;
 		
 		try {
@@ -231,11 +246,11 @@ public class UserDAO {
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			 pstmt.setInt(1,input);
+			pstmt.setInt(1,input);
 			
-			result = pstmt.executeUpdate();
-		
-			
+			// 결과값 반환
+			result = pstmt.executeUpdate(); // DML -> 무조건 executeUpdate() 사용
+				
 		} finally {
 			
 			close(pstmt);
@@ -243,28 +258,72 @@ public class UserDAO {
 
 		return result;
 	}
-
-
-	public int updateUser(Connection conn, User user) throws Exception{
+ 
+	
+	/** 6-1. ID,PW가 일치하는 회원이 있는지 조회(SELECT) DAO
+	 * @param conn
+	 * @param id
+	 * @param pw
+	 * @return
+	 */
+	public int selectUser(Connection conn, String id, String pw) throws Exception{
 		
-		int result = 0;
+		int userNo = 0;
 		
 		try {
 			
 			String sql = """
-					UPDATE TB_USER 
-                    SET USER_NAME = ?
-                    WHERE USER_ID = ?
-                    AND USER_PW = ?
+					SELECT USER_NO
+					FROM TB_USER
+					WHERE USER_ID = ?
+					AND USER_PW = ?
 					""";
-			
-			
 			
 			pstmt = conn.prepareStatement(sql);
 			
-		    pstmt.setString(1, user.getUserId());
-			pstmt.setString(2, user.getUserPw());
-			pstmt.setString(3, user.getUserName());
+			pstmt.setString(1,id);
+			pstmt.setString(2,pw);
+			
+			rs = pstmt.executeQuery();
+			
+			// 조회된 행이 1개가 있을 경우
+			if(rs.next()) {
+				 userNo = rs.getInt("USER_NO");
+			}
+			
+		} finally {
+			
+			close(rs);
+			close(pstmt);
+		}
+
+		return userNo; // 조회성공 USER_NO , 실패 0 반환
+	}
+	
+	
+	/** 6-2. USER_NO가 일치하는 회원의 이름 수정 DAO
+	 * @param conn
+	 * @param name
+	 * @param userNo
+	 * @return
+	 * @throws Exception
+	 */
+	public int updateName(Connection conn, String name, int userNo) throws Exception{
+
+		int result = 0;
+		
+		try {
+			
+			String sql = """
+					UPDATE TB_USER
+					SET USER_NAME = ?
+					WHERE USER_NO = ?
+					""";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, name);
+			pstmt.setInt(2,userNo);
 			
 			result = pstmt.executeUpdate();
 			
@@ -275,23 +334,45 @@ public class UserDAO {
 		return result;
 	}
 
-
-	public int insertUser2(Connection conn, User user) throws Exception{
-
-		int result = 0;
+	
+	/** 7. 아이디 중복 검사 DAO
+	 * @param conn
+	 * @param id
+	 * @return
+	 */
+	public int idCheck(Connection conn, String id) throws Exception{
+		
+		int count = 0;
 		
 		try {
 			
 			String sql = """
-					
+					SELECT COUNT(*)
+					FROM TB_USER
+					WHERE USER_ID = ?
 					""";
 			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1,id);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				count = rs.getInt(1); // 조회된 컬럼 순서 번호를 이용해 컬럼값 얻어오기
+			}
 			
 		} finally {
 			
+			close(rs);
+			close(pstmt);
 		}
 		
-		
-		return 0;
+		return count;
 	}
+
+
+
+
 }
