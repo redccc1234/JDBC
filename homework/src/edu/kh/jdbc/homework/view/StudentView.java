@@ -117,6 +117,9 @@ public class StudentView {
 			
 			System.out.println("\n<3. 학생 정보 수정>\n");
 			
+			System.out.print("수정할 학생 번호 입력 : ");
+			int stdNo  = sc.nextInt();
+			
 			int input = 0;
 		
 		  do {
@@ -132,7 +135,7 @@ public class StudentView {
 			case 1 : System.out.print("\n수정할 이름 입력 : \n" );
 					 String name = sc.next();
 					 
-					 int result1 = service.studentUpdateName(name);
+					 int result1 = service.studentUpdateName(name,stdNo);
 					 
 					 if(result1 > 0) System.out.println("수정 성공");
 					 else           System.out.println("수정 실패");
@@ -142,7 +145,7 @@ public class StudentView {
 			case 2 : System.out.print("\n수정할 나이 입력 : \n");
 					 int age = sc.nextInt();
 					 
-					 int result2 = service.studentUpdateAge(age);
+					 int result2 = service.studentUpdateAge(age,stdNo);
 					 
 					 if(result2 > 0) System.out.println("수정 성공");
 				     else           System.out.println("수정 실패");
@@ -152,7 +155,7 @@ public class StudentView {
 			case 3 : System.out.print("\n수정할 전공 입력 : \n");
 					 String major = sc.next(); 
 					 
-					 int result3 = service.studentUpdateMajor(major);
+					 int result3 = service.studentUpdateMajor(major,stdNo);
 					 
 					 if(result3 > 0) System.out.println("수정 성공");
 					 else           System.out.println("수정 실패");
@@ -170,11 +173,24 @@ public class StudentView {
 		}
 
 
-		/** 4. 학생 정보 삭제
+		/** 4. 학생 정보 삭제 (DELETE)
+		 * 
 		 * 
 		 */
 		private void studentDelete() throws Exception{
-			// TODO Auto-generated method stub
+			
+			System.out.println("\n<4. 학생 정보 삭제>\n");
+			
+			System.out.print(" 학생 번호 입력 : ");
+			int input = sc.nextInt();
+			
+			int result = service.studentDelete(input);
+			
+			if(result > 0 ) {
+				System.out.println("학생 정보가 삭제되었습니다.");
+			}else {
+				System.out.println("학셍 번호와 일치하는 번호가 없습니다.");
+			}
 			
 		}
 
@@ -183,7 +199,15 @@ public class StudentView {
 		 * 
 		 */
 		private void majorSelect() throws Exception{
-			// TODO Auto-generated method stub
+			
+			System.out.println("\n<5.전공별 학생 조회>\n");
+			
+			List<Student> studentList = service.majorSelect();
+			
+			for(Student student  : studentList) {
+				
+				System.out.println(student);
+			}
 			
 		}
 	

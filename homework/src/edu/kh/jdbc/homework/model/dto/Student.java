@@ -12,6 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 
+
 public class Student {
 
 	private int num;
@@ -21,3 +22,5 @@ public class Student {
 	private String enrolldate;
 	
 }
+
+
