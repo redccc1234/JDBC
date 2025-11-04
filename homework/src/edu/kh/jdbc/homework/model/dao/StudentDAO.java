@@ -19,7 +19,7 @@ public class StudentDAO {
 	/** 1. 학생 등록 (INSERT) DAO
 	 * @param conn
 	 * @param student
-	 * @return
+	 * @return result
 	 * @throws Exception
 	 */
 	public int studentInsert(Connection conn, Student student) throws Exception{
@@ -52,7 +52,7 @@ public class StudentDAO {
 
 	/** 2. 전체 학생 조회 (SELECT) DAO
 	 * @param conn
-	 * @return
+	 * @return studentList
 	 * @throws Exception
 	 */
 	public List<Student> studentSelect(Connection conn)  throws Exception{
@@ -97,7 +97,7 @@ public class StudentDAO {
 	 * @param conn
 	 * @param name
 	 * @param stdNo
-	 * @return
+	 * @return result1
 	 * @throws Exception
 	 */
 	public int studentUpdateName(Connection conn, String name , int stdNo) throws Exception{
@@ -130,7 +130,7 @@ public class StudentDAO {
 	 * @param conn
 	 * @param age
 	 * @param stdNo
-	 * @return
+	 * @return result2
 	 * @throws Exception
 	 */
 	public int studentUpdateAge(Connection conn, int age , int stdNo) throws Exception{
@@ -163,7 +163,7 @@ public class StudentDAO {
 	 * @param conn
 	 * @param major
 	 * @param stdNo
-	 * @return
+	 * @return result3
 	 * @throws Exception
 	 */
 	public int studentUpdateMajor(Connection conn, String major , int stdNo) throws Exception{
@@ -195,7 +195,7 @@ public class StudentDAO {
 	/** 4. 학생 정보 삭제 (DELETE) DAO
 	 * @param conn
 	 * @param input
-	 * @return
+	 * @return result
 	 * @throws Exception
 	 */
 	public int studentDelete(Connection conn, int input) throws Exception{
@@ -225,7 +225,7 @@ public class StudentDAO {
 
 	/** 5.전공별 학생 조회 DAO
 	 * @param conn
-	 * @return
+	 * @return studentList
 	 * @throws Exception
 	 */
 	public List<Student> majorSelect(Connection conn) throws Exception{

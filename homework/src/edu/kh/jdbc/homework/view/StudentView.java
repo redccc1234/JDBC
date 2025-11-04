@@ -15,7 +15,7 @@ public class StudentView {
 		
 		public void mainMenu() {
 			
-			int input = 0;
+			int input = 0; // 번호 선택용 변수
 			
 			do {
 				
@@ -61,7 +61,7 @@ public class StudentView {
 
 
 		/** 1. 학생 등록 (INSERT)
-		 * 
+		 *  INSERT는 결과값을 숫자로 가져옴
 		 */
 		private void studentInsert() throws Exception {
 
@@ -99,12 +99,12 @@ public class StudentView {
 			
 			List<Student> studentList = service.studentSelect();
 			
-			if(studentList.isEmpty()) {
+			if(studentList.isEmpty()) { // 안에 값이 없으면 반환함
 				System.out.println("\n***조회 결과가 없습니다***\n");
 				return;
 			} 
 			
-			for(Student student : studentList) {
+			for(Student student : studentList) { // 한 개씩 조회해서 출력
 				System.out.println(student);
 			}
 		}
@@ -174,8 +174,7 @@ public class StudentView {
 
 
 		/** 4. 학생 정보 삭제 (DELETE)
-		 * 
-		 * 
+		 *  
 		 */
 		private void studentDelete() throws Exception{
 			

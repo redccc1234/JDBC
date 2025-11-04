@@ -13,7 +13,7 @@ public class StudentService {
 
 	/** 1. 학생 등록 (INSERT) service
 	 * @param student
-	 * @return
+	 * @return result
 	 * @throws Exception
 	 */
 	public int studentInsert(Student student) throws Exception{
@@ -31,7 +31,7 @@ public class StudentService {
 	}
 
 	/**2. 전체 학생 조회 (SELECT) service
-	 * @return
+	 * @return studentList
 	 * @throws Exception
 	 */
 	public List<Student> studentSelect() throws Exception{
@@ -48,7 +48,7 @@ public class StudentService {
 	/**  3. 학생 정보 수정 (UPDATE) 이름 수정 service
 	 * @param name
 	 * @param stdNo
-	 * @return
+	 * @return result1
 	 * @throws Exception
 	 */
 	public int studentUpdateName(String name , int stdNo) throws Exception{
@@ -62,13 +62,13 @@ public class StudentService {
 		
 		JDBCTemplate.close(conn);
 		
-		return 0;
+		return result1;
 	}
 
 	/**  3. 학생 정보 수정 (UPDATE) 나이 수정 service
 	 * @param age
 	 * @param stdNo
-	 * @return
+	 * @return result2
 	 * @throws Exception
 	 */
 	public int studentUpdateAge(int age , int stdNo) throws Exception{
@@ -88,7 +88,7 @@ public class StudentService {
 	/**  3. 학생 정보 수정 (UPDATE) 전공 수정 service
 	 * @param major
 	 * @param stdNo
-	 * @return
+	 * @return result3
 	 * @throws Exception
 	 */
 	public int studentUpdateMajor(String major , int stdNo) throws Exception{
@@ -107,7 +107,7 @@ public class StudentService {
 
 	/** 4. 학생 정보 삭제 (DELETE) service
 	 * @param input
-	 * @return
+	 * @return result
 	 * @throws Exception
 	 */
 	public int studentDelete(int input) throws Exception{
@@ -125,7 +125,7 @@ public class StudentService {
 	}
 
 	/** 5.전공별 학생 조회 service
-	 * @return
+	 * @return studentList
 	 * @throws Exception
 	 */
 	public List<Student> majorSelect() throws Exception{

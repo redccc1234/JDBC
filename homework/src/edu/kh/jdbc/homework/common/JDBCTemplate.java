@@ -4,14 +4,13 @@ import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
 public class JDBCTemplate {
 
 	// getconnection
-	// commit / rollbsck
+	// commit / rollback
 	// Conntection
 	// Statement
 	// ResultSet
@@ -69,7 +68,7 @@ public class JDBCTemplate {
 				
 				if(conn != null && !conn.isClosed()) conn.rollback();
 				
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				System.out.println("롤백 중 예외발생");
 				e.printStackTrace();
 			}
@@ -92,6 +91,7 @@ public class JDBCTemplate {
 			if(stmt != null && !stmt.isClosed()) stmt.close();
 		} catch (Exception e) {
 			System.out.println("Statement close() 중 예외 발생");
+			e.printStackTrace();
 		}
 	}
 	
